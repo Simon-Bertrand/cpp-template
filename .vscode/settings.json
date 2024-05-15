@@ -1,0 +1,5 @@
+{
+    "C_Cpp.default.includePath": ["./include"],
+    "editor.defaultFormatter": "xaver.clang-format",
+    "editor.formatOnSave": true
+}
