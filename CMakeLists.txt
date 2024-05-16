@@ -1,16 +1,22 @@
 cmake_minimum_required(VERSION 3.27)
 project(MyProgram)
-
-# Ajoutez ici les fichiers source de votre projet
 file(GLOB_RECURSE SOURCES
     src/*.cpp
 )
-
-# Ajoutez ici les fichiers d'en-tête de votre projet
 file(GLOB_RECURSE HEADERS
     include/*.hpp
 )
-include_directories(MyProgram PRIVATE include)
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+set(FETCHCONTENT_QUIET FALSE)
+include(FetchContent)
+FetchContent_Declare(
+    torch
+    URL https://download.pytorch.org/libtorch/nightly/cpu/libtorch-shared-with-deps-latest.zip
+)
+FetchContent_MakeAvailable(torch)
 
-# target_link_libraries(${PROJECT_NAME} mylib)
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+include_directories(${PROJECT_NAME} PRIVATE include)
+
+set(CMAKE_PREFIX_PATH  ${CMAKE_BINARY_DIR}/_deps/torch-src/share/cmake/)
+find_package(Torch REQUIRED)
+target_link_libraries(${PROJECT_NAME} "${TORCH_LIBRARIES}")
